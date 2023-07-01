@@ -2,6 +2,7 @@ package com.loancalculator.backend.service.impl;
 
 import com.loancalculator.backend.domain.LoanDomain;
 import com.loancalculator.backend.entity.*;
+import com.loancalculator.backend.entity.enums.LoanTermType;
 import com.loancalculator.backend.repository.LoanRepository;
 import com.loancalculator.backend.request.LoanRequest;
 import com.loancalculator.backend.response.LoanResponse;
@@ -48,6 +49,11 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public LoanResponse calculateLoan(LoanRequest loanRequest) {
+        Double monthlyPayment = loanDomain.calculateMonthlyPayment(loanRequest.loanAmount(), loanRequest.loanTerm(),
+                loanRequest.interestRate(), 0, LoanTermType.MONTH);
+        System.out.println(loanDomain.
+                createLoanAmortizationPaymentList(monthlyPayment,
+                        loanRequest.loanAmount(),0,loanRequest.loanTerm()));
         return null;
     }
 

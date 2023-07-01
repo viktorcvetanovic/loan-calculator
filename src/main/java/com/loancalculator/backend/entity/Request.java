@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.time.*;
 import java.util.*;
 import javax.persistence.*;
+import javax.servlet.http.HttpServletRequest;
+
 import lombok.*;
 
 @Entity
@@ -20,12 +22,10 @@ public class Request implements Serializable {
 	private Integer id;
 	@Column(name = "request_time")
 	private String requestTime;
-	@ManyToOne
-	@JoinColumn(name = "fk_simple_loan", referencedColumnName = "simple_loan_id")
-	private SimpleLoan fkSimpleLoan;
-	@ManyToOne
-	@JoinColumn(name = "fk_loan", referencedColumnName = "loan_id")
-	private Loan fkLoan;
+	@Column(name = "request_method")
+	private String requestMethod;
+	@Column(name = "request_path")
+	private String requestPath;
 	
 	@Override
 	public boolean equals(Object o) {
@@ -40,5 +40,13 @@ public class Request implements Serializable {
 		return Objects.hash(id);
 	}
 
+
+	public static Request fromHttpReq(HttpServletRequest httpServletRequest){
+		Request request = new Request();
+		request.setRequestTime(new Date().toString());
+		request.setRequestMethod(httpServletRequest.getMethod());
+		request.setRequestPath(httpServletRequest.getServletPath());
+		return request;
+	}
 
 }
