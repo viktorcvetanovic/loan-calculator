@@ -57,6 +57,12 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.9.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.immutables</groupId>
+			<artifactId>value</artifactId>
+			<version>2.9.2</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -64,7 +70,25 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${project.build.directory}/generated-sources/</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
+
 	</build>
 
 </project>

@@ -1,0 +1,37 @@
+{
+	"info": {
+		"_postman_id": "062b45e7-b0bb-43a9-8591-946974f71256",
+		"name": "LoanCalculatorAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "New Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"loanAmount\": 500,\r\n    \"interestRate\": 5,\r\n    \"loanTerm\":2,\r\n    \"loanTermType\": \"MONTH\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/loans/simple",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"loans",
+						"simple"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

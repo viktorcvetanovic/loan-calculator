@@ -1,10 +1,12 @@
 package com.loancalculator.backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.time.*;
 import java.util.*;
 import javax.persistence.*;
+
+import com.loancalculator.backend.entity.enums.LoanTermType;
+import com.loancalculator.backend.request.SimpleLoanRequest;
+import com.loancalculator.backend.response.SimpleLoanResponse;
 import lombok.*;
 
 @Entity
@@ -25,7 +27,12 @@ public class SimpleLoan implements Serializable {
 	@Column(name = "simple_loan_term")
 	private Integer simpleLoanTerm;
 	@Column(name = "simple_loan_term_type")
-	private String simpleLoanTermType;
+	private LoanTermType simpleLoanTermType;
+	@Column(name = "monthly_payment")
+	private Double monthlyPayment;
+	@Column(name = "total_interest_paid")
+	private Double totalInterestPaid;
+
 	
 	@Override
 	public boolean equals(Object o) {
@@ -40,5 +47,15 @@ public class SimpleLoan implements Serializable {
 		return Objects.hash(id);
 	}
 
-
+	public static SimpleLoan fromRequestAndResponse(SimpleLoanRequest request,
+													SimpleLoanResponse simpleLoanResponse){
+		SimpleLoan simpleLoan = new SimpleLoan();
+		simpleLoan.simpleLoanAmount = request.loanAmount();
+		simpleLoan.simpleLoanInterest = request.interestRate();
+		simpleLoan.simpleLoanTerm = request.loanTerm();
+		simpleLoan.simpleLoanTermType = request.loanTermType();
+		simpleLoan.monthlyPayment = simpleLoanResponse.monthlyPayment();
+		simpleLoan.totalInterestPaid = simpleLoanResponse.totalInterestPaid();
+		return simpleLoan;
+	}
 }

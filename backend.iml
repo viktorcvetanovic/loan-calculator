@@ -7,6 +7,7 @@
         <sourceRoots>
           <root url="file://$MODULE_DIR$/src/main/java" />
           <root url="file://$MODULE_DIR$/src/main/resources" />
+          <root url="file://$MODULE_DIR$/target/generated-sources/annotations" />
         </sourceRoots>
       </configuration>
     </facet>
@@ -15,7 +16,7 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
-          <factory-entry name="entityManagerFactory" value="6aea5f56-a1c8-417c-8ed7-b6b1c019aea8" />
+          <factory-entry name="entityManagerFactory" value="1d829aa6-93b8-4beb-b8f7-66fe0a6f2d92" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>
@@ -31,6 +32,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/target/generated-sources/annotations" isTestSource="false" generated="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
@@ -135,5 +137,6 @@
     <orderEntry type="library" name="Maven: org.springframework.plugin:spring-plugin-metadata:1.2.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.mapstruct:mapstruct:1.2.0.Final" level="project" />
     <orderEntry type="library" name="Maven: io.springfox:springfox-swagger-ui:2.9.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.immutables:value:2.9.2" level="project" />
   </component>
 </module>

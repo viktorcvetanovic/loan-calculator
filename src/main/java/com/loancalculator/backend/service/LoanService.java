@@ -3,6 +3,9 @@ package com.loancalculator.backend.service;
 import com.loancalculator.backend.entity.*;
 import java.util.Collection;
 import java.util.List;
+
+import com.loancalculator.backend.request.LoanRequest;
+import com.loancalculator.backend.response.LoanResponse;
 import org.springframework.data.jpa.domain.Specification;
 
 public interface LoanService {
@@ -17,4 +20,5 @@ public interface LoanService {
 
 	void deleteById(Integer loanId);
 
+    LoanResponse calculateLoan(LoanRequest loanRequest);
 }
