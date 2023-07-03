@@ -64,6 +64,8 @@ class LoanDomainTest {
         assertThrows(NullPointerException.class, () -> loanCalculator.calculateMonthlyPayment(loanAmount, loanTerm, interestRate, downPayment, loanTermType));
     }
 
+
+
     @Test
     void testCreateLoanAmortizationPaymentList() {
         double loanAmount = 10000.0;

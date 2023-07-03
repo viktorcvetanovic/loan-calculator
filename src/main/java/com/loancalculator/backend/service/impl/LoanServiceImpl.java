@@ -4,6 +4,7 @@ import com.loancalculator.backend.domain.LoanDomain;
 import com.loancalculator.backend.entity.*;
 import com.loancalculator.backend.entity.enums.LoanTermType;
 import com.loancalculator.backend.repository.LoanRepository;
+import com.loancalculator.backend.repository.PaymentRepository;
 import com.loancalculator.backend.request.LoanRequest;
 import com.loancalculator.backend.response.ImmutableLoanResponse;
 import com.loancalculator.backend.response.LoanResponse;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 public class LoanServiceImpl implements LoanService {
     private final LoanRepository loanRepository;
     private final LoanDomain loanDomain;
+    private final PaymentRepository paymentRepository;
 
     @Override
     public List<Loan> findAll(Specification<Loan> specification) {
@@ -54,8 +56,10 @@ public class LoanServiceImpl implements LoanService {
                 createLoanAmortizationPaymentList(loanRequest.loanAmount(),loanRequest.loanTerm(),
                         loanRequest.interestRate());
 
-        Loan loan = Loan.fromLoanAndList(loanRequest, amortizationList);
+        Loan loan = Loan.from(loanRequest);
         Loan savedLoan = save(loan);
+        amortizationList.forEach(e-> e.setLoan(savedLoan));
+        paymentRepository.saveAll(amortizationList);
         return ImmutableLoanResponse
                 .builder()
                 .loanAmount(savedLoan.getLoanAmount())

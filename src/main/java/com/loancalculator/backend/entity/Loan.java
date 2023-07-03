@@ -1,8 +1,6 @@
 package com.loancalculator.backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.time.*;
 import java.util.*;
 import javax.persistence.*;
 
@@ -28,9 +26,7 @@ public class Loan implements Serializable {
 	private Integer loanNumberOfPayments;
 	@Column(name = "loan_payment_frequency")
 	private String loanPaymentFrequency;
-	@OneToMany(mappedBy="id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Payment> paymentList;
-	
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -54,10 +50,4 @@ public class Loan implements Serializable {
 		return loan;
 	}
 
-	public static Loan fromLoanAndList(LoanRequest loanRequest,
-									   List<Payment> amortizationList){
-		Loan loan = from(loanRequest);
-		loan.paymentList = amortizationList;
-		return loan;
-	}
 }
