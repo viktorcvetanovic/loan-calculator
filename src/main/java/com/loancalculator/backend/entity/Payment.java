@@ -28,6 +28,9 @@ public class Payment {
     private Double principalApplied;
     @Column(name = "interest_payment")
     private Double interestPayment;
+    @ManyToOne
+    @JoinColumn(name = "loan_fk", referencedColumnName = "loan_id")
+    private Loan loan;
 
     public Payment(int paymentNumber, Double loanPayment, Double endingBalance, Double principalApplied, Double interestPayment) {
         this.paymentNumber = paymentNumber;

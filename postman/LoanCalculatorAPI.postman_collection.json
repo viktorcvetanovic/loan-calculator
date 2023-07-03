@@ -34,7 +34,7 @@
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "Loan",
 			"request": {
 				"method": "POST",
 				"header": [],

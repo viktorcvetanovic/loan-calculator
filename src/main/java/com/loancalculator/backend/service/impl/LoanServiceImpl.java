@@ -5,6 +5,7 @@ import com.loancalculator.backend.entity.*;
 import com.loancalculator.backend.entity.enums.LoanTermType;
 import com.loancalculator.backend.repository.LoanRepository;
 import com.loancalculator.backend.request.LoanRequest;
+import com.loancalculator.backend.response.ImmutableLoanResponse;
 import com.loancalculator.backend.response.LoanResponse;
 import com.loancalculator.backend.service.LoanService;
 
@@ -49,12 +50,20 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public LoanResponse calculateLoan(LoanRequest loanRequest) {
-        Double monthlyPayment = loanDomain.calculateMonthlyPayment(loanRequest.loanAmount(), loanRequest.loanTerm(),
-                loanRequest.interestRate(), 0, LoanTermType.MONTH);
-        System.out.println(loanDomain.
-                createLoanAmortizationPaymentList(monthlyPayment,
-                        loanRequest.loanAmount(),0,loanRequest.loanTerm()));
-        return null;
+       List<Payment> amortizationList = loanDomain.
+                createLoanAmortizationPaymentList(loanRequest.loanAmount(),loanRequest.loanTerm(),
+                        loanRequest.interestRate());
+
+        Loan loan = Loan.fromLoanAndList(loanRequest, amortizationList);
+        Loan savedLoan = save(loan);
+        return ImmutableLoanResponse
+                .builder()
+                .loanAmount(savedLoan.getLoanAmount())
+                .addAllPaymentList(amortizationList)
+                .id(savedLoan.getId())
+                .loanInterest(savedLoan.getLoanInterest())
+                .loanNumberOfPayments(savedLoan.getLoanNumberOfPayments())
+                .build();
     }
 
 

@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.time.*;
 import java.util.*;
 import javax.persistence.*;
+
+import com.loancalculator.backend.request.LoanRequest;
 import lombok.*;
 
 @Entity
@@ -26,6 +28,8 @@ public class Loan implements Serializable {
 	private Integer loanNumberOfPayments;
 	@Column(name = "loan_payment_frequency")
 	private String loanPaymentFrequency;
+	@OneToMany(mappedBy="id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Payment> paymentList;
 	
 	@Override
 	public boolean equals(Object o) {
@@ -41,4 +45,19 @@ public class Loan implements Serializable {
 	}
 
 
+	public static Loan from(LoanRequest loanRequest){
+		Loan loan = new Loan();
+		loan.loanAmount = loanRequest.loanAmount();
+		loan.loanInterest = (double)loanRequest.interestRate();
+		loan.loanNumberOfPayments = loanRequest.loanTerm();
+
+		return loan;
+	}
+
+	public static Loan fromLoanAndList(LoanRequest loanRequest,
+									   List<Payment> amortizationList){
+		Loan loan = from(loanRequest);
+		loan.paymentList = amortizationList;
+		return loan;
+	}
 }

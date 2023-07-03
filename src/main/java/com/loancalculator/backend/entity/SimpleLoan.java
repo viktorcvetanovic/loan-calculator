@@ -47,15 +47,15 @@ public class SimpleLoan implements Serializable {
 		return Objects.hash(id);
 	}
 
-	public static SimpleLoan fromRequestAndResponse(SimpleLoanRequest request,
-													SimpleLoanResponse simpleLoanResponse){
+	public static SimpleLoan fromRequestAndData(SimpleLoanRequest request,
+													Double monthlyPayment, Double totalInterestPaid){
 		SimpleLoan simpleLoan = new SimpleLoan();
 		simpleLoan.simpleLoanAmount = request.loanAmount();
 		simpleLoan.simpleLoanInterest = request.interestRate();
 		simpleLoan.simpleLoanTerm = request.loanTerm();
 		simpleLoan.simpleLoanTermType = request.loanTermType();
-		simpleLoan.monthlyPayment = simpleLoanResponse.monthlyPayment();
-		simpleLoan.totalInterestPaid = simpleLoanResponse.totalInterestPaid();
+		simpleLoan.monthlyPayment = monthlyPayment;
+		simpleLoan.totalInterestPaid = totalInterestPaid;
 		return simpleLoan;
 	}
 }

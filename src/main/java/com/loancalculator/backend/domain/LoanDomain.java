@@ -22,8 +22,8 @@ public class LoanDomain {
      */
     public double calculateMonthlyPayment(double loan, int term, double rate,
                                           double downPay, LoanTermType loanTermType) {
-        if(rate == 0 || loan == 0 || term == 0){
-            throw new RuntimeException("Check your parameters. none of these cant be zero");
+        if (rate == 0 || loan == 0 || term == 0) {
+            throw new NullPointerException("Check your parameters. none of these cant be zero");
         }
         double monthlyRate = (rate / 100.0) / 12;
         int termsInMonths = convertTermTime(loanTermType, term);
@@ -42,8 +42,8 @@ public class LoanDomain {
      */
     public double calculateInterestAccrued(double monthlyPayment, double loan, double downPay,
                                            int term, LoanTermType loanTermType) {
-        if(monthlyPayment == 0 || loan == 0 || term == 0){
-            throw new RuntimeException("Check your parameters. none of these cant be zero");
+        if (monthlyPayment == 0 || loan == 0 || term == 0) {
+            throw new NullPointerException("Check your parameters. none of these cant be zero");
         }
 
         int termsInMonths = convertTermTime(loanTermType, term);
@@ -52,38 +52,56 @@ public class LoanDomain {
         return totalCost - loan;
     }
 
+    /**
+     * Method used to convert Term if type is YEAR.
+     *
+     * @param loanTermType type of loan
+     * @param term         term for loan
+     * @return converted term
+     */
     private Integer convertTermTime(LoanTermType loanTermType, int term) {
         return loanTermType == LoanTermType.MONTH ? term : term * 12;
     }
 
 
-    //TODO: ONLY TO MAKE THIS METHOD TO WORK AS SHOULD
-     public List<Payment> createLoanAmortizationPaymentList(double monthlyPayment, double loan, double downPay, int term) {
+    public List<Payment> createLoanAmortizationPaymentList(double loanAmount, int interestRate, int numberOfPayments) {
+        if (loanAmount == 0 || interestRate == 0 || numberOfPayments == 0) {
+            throw new NullPointerException("Check your parameters. none of these cant be zero");
+        }
         List<Payment> amortizationSchedule = new ArrayList<>();
-
-        // Calculate the loan amount after the down payment
-        double remainingLoan = loan - downPay;
-
-        // Calculate the monthly interest rate
-        double monthlyInterestRate = 0.0; // Assuming annual interest rate is already converted to a monthly rate
-
+        double monthlyPayment = calculateMonthlyPayment(loanAmount, numberOfPayments,
+                interestRate, 0, LoanTermType.MONTH);
+        double interest = calculateInterestAccrued(monthlyPayment, loanAmount, 0,
+                numberOfPayments, LoanTermType.MONTH);
+        double entireLoanAmount = loanAmount + interest;
         // Calculate the amortization schedule
-        for (int month = 1; month <= term; month++) {
-            // Calculate the interest for this month
-            double interest = remainingLoan * monthlyInterestRate;
+        double balanceOwed = loanAmount;
+        for (int month = 1; month <= numberOfPayments; month++) {
 
-            // Calculate the principal amount for this month
-            double principal = monthlyPayment - interest;
 
-            // Calculate the remaining balance after this month's payment
-            double balance = remainingLoan - principal;
+            System.out.println("Entire loan amount: " + entireLoanAmount);
+            System.out.println("Month: " + month);
+            System.out.println("Payment Amount: " + monthlyPayment);
+            double monthInterestAmount = (double)interestRate/100/12*balanceOwed;
+            double monthPrincipalAmount = monthlyPayment - monthInterestAmount;
 
-            // Create a Payment object for this month and add it to the amortization schedule list
-            Payment payment = new Payment(month, monthlyPayment, balance, principal, interest);
+            System.out.println("Interest Amount: " + monthInterestAmount);
+            System.out.println("Principal amount: " + monthPrincipalAmount);
+            System.out.println("Balance owed: " + balanceOwed);
+            System.out.println("-----------------------------------");
+
+            Payment payment = new Payment();
+            payment.setLoanPayment(monthlyPayment);
+            payment.setPaymentNumber(month);
+            payment.setPrincipalApplied(monthPrincipalAmount);
+            payment.setInterestPayment(monthInterestAmount);
+            payment.setEndingBalance(balanceOwed);
+
             amortizationSchedule.add(payment);
 
-            // Update the remaining loan amount
-            remainingLoan = balance;
+            balanceOwed -=monthPrincipalAmount;
+
+
         }
 
         return amortizationSchedule;

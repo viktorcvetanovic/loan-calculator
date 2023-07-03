@@ -54,17 +54,14 @@ public class SimpleLoanServiceImpl implements SimpleLoanService {
                 loanRequest.interestRate(), 0, loanRequest.loanTermType());
         Double totalInterestPaid = loanDomain.calculateInterestAccrued(monthlyPayment, loanRequest.loanAmount(),
                 0, loanRequest.loanTerm(), loanRequest.loanTermType());
-        SimpleLoanResponse simpleLoanResponse = ImmutableSimpleLoanResponse
+
+        SimpleLoan savedSimpleLoan = save(SimpleLoan.fromRequestAndData(loanRequest, monthlyPayment, totalInterestPaid));
+
+        return ImmutableSimpleLoanResponse
                 .builder()
-                .monthlyPayment(monthlyPayment)
-                .totalInterestPaid(totalInterestPaid)
+                .monthlyPayment(savedSimpleLoan.getMonthlyPayment())
+                .totalInterestPaid(savedSimpleLoan.getTotalInterestPaid())
                 .build();
-
-        //should be done with AOP to be sure that someone who is working
-        //do not forget to save
-        save(SimpleLoan.fromRequestAndResponse(loanRequest,simpleLoanResponse));
-
-        return simpleLoanResponse;
     }
 
 
