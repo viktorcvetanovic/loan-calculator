@@ -39,6 +39,12 @@ The Loan Calculator is an invaluable financial tool that empowers users to make 
 
 Project is written in Spring and it uses mariadb database for storing data. In directory you can find entire database as well as postman collection to import.
 
+### Logic model
+![alt text](img/log.PNG)
+
+### Sequently diagram
+![alt text](img/sekv.PNG)
+
 ## Things that need to be improved
 
 1. Error handling</br>
