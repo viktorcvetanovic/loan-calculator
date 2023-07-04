@@ -8,14 +8,17 @@ import com.loancalculator.backend.repository.PaymentRepository;
 import com.loancalculator.backend.request.LoanRequest;
 import com.loancalculator.backend.response.ImmutableLoanResponse;
 import com.loancalculator.backend.response.LoanResponse;
+import com.loancalculator.backend.response.PaymentResponse;
 import com.loancalculator.backend.service.LoanService;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -56,14 +59,16 @@ public class LoanServiceImpl implements LoanService {
                 createLoanAmortizationPaymentList(loanRequest.loanAmount(),loanRequest.loanTerm(),
                         loanRequest.interestRate());
 
-        Loan loan = Loan.from(loanRequest);
-        Loan savedLoan = save(loan);
+        Loan savedLoan = save(Loan.from(loanRequest));
         amortizationList.forEach(e-> e.setLoan(savedLoan));
-        paymentRepository.saveAll(amortizationList);
+        List<PaymentResponse> paymentResponseList =  paymentRepository.saveAll(amortizationList)
+                .stream()
+                .map(Payment::toPaymentResponse)
+                .collect(Collectors.toList());
         return ImmutableLoanResponse
                 .builder()
                 .loanAmount(savedLoan.getLoanAmount())
-                .addAllPaymentList(amortizationList)
+                .addAllPaymentList(paymentResponseList)
                 .id(savedLoan.getId())
                 .loanInterest(savedLoan.getLoanInterest())
                 .loanNumberOfPayments(savedLoan.getLoanNumberOfPayments())

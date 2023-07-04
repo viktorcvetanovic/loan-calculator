@@ -1,5 +1,7 @@
 package com.loancalculator.backend.entity;
 
+import com.loancalculator.backend.response.ImmutablePaymentResponse;
+import com.loancalculator.backend.response.PaymentResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -33,11 +35,25 @@ public class Payment implements Serializable {
     @JoinColumn(name = "loan_fk", referencedColumnName = "loan_id")
     private Loan loan;
 
-    public Payment(int paymentNumber, Double loanPayment, Double endingBalance, Double principalApplied, Double interestPayment) {
+    public Payment(int paymentNumber, Double loanPayment, Double endingBalance,
+                   Double principalApplied, Double interestPayment) {
         this.paymentNumber = paymentNumber;
         this.loanPayment = loanPayment;
         this.endingBalance = endingBalance;
         this.principalApplied = principalApplied;
         this.interestPayment = interestPayment;
+    }
+
+
+    public PaymentResponse toPaymentResponse(){
+        return ImmutablePaymentResponse
+                .builder()
+                .id(id)
+                .paymentNumber(paymentNumber)
+                .loanPayment(loanPayment)
+                .endingBalance(endingBalance)
+                .principalApplied(principalApplied)
+                .interestPayment(interestPayment)
+                .build();
     }
 }

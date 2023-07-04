@@ -19,5 +19,5 @@ public interface LoanResponse {
 
     Integer loanNumberOfPayments();
 
-    List<Payment> paymentList();
+    List<PaymentResponse> paymentList();
 }

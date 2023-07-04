@@ -63,7 +63,13 @@ public class LoanDomain {
         return loanTermType == LoanTermType.MONTH ? term : term * 12;
     }
 
-
+    /**
+     * Method used to create a list of payments where is loan amortization calculated.
+     * @param loanAmount amount of loan
+     * @param interestRate rate of interest
+     * @param numberOfPayments number of payments
+     * @return created list of payments
+     */
     public List<Payment> createLoanAmortizationPaymentList(double loanAmount, int interestRate, int numberOfPayments) {
         if (loanAmount == 0 || interestRate == 0 || numberOfPayments == 0) {
             throw new NullPointerException("Check your parameters. none of these cant be zero");
